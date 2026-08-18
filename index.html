@@ -372,7 +372,7 @@
     <h3>Arma la ecuación</h3>
     <p>Retomando el péndulo simple ya reordenado:</p>
     <div class="eq-block">$$T = \left(\frac{2\pi}{\sqrt{g}}\right)\sqrt{L}$$</div>
-    <p>Hagan clic en cada pieza y luego en la casilla donde creen que va, para armar $y = m \cdot x + b$.</p>
+    <p><strong>No es para arrastrar:</strong> hagan clic en una pieza para seleccionarla, y luego clic en la casilla donde creen que va, para armar $y = m \cdot x + b$.</p>
 
     <div class="pool" id="poolA">
       <button class="piece" data-role="y" data-tex="T">$T$</button>
@@ -436,17 +436,17 @@
   <div class="card">
     <p class="kicker">✏️ Ejercicio</p>
     <h3>Practiquen con casos nuevos</h3>
-    <p>Estas tres relaciones no aparecen en ninguna lectura — aplíquenles el mismo procedimiento (Pasos 1-3) para identificar x, y, m y b.</p>
+    <p>Estas tres relaciones no aparecen en ninguna lectura — aplíquenles el mismo procedimiento (Pasos 1-3) para identificar x, y, m y b. Usen "/" para fracciones, "^" para exponentes, "ln(...)" para logaritmo natural, y "lambda" o λ para la constante de decaimiento.</p>
 
     <div class="transfer-item">
       <p><strong>1. Iluminancia de una fuente puntual</strong></p>
       <div class="eq-block">$$E(d) = \frac{I}{d^2}$$</div>
       <p>E es la iluminancia medida a una distancia d de la fuente; I es la intensidad luminosa de la fuente (desconocida).</p>
       <div class="xyzb-grid">
-        <label>x <input type="text" id="t1x" placeholder="ej. 1/d²"></label>
-        <label>y <input type="text" id="t1y" placeholder="ej. E"></label>
-        <label>m <input type="text" id="t1m" placeholder="ej. I"></label>
-        <label>b <input type="text" id="t1b" placeholder="ej. 0"></label>
+        <label>x <input type="text" id="t1x"></label>
+        <label>y <input type="text" id="t1y"></label>
+        <label>m <input type="text" id="t1m"></label>
+        <label>b <input type="text" id="t1b"></label>
       </div>
       <div class="answer" id="t1ans">x = 1/d², y = E, m = I, b = 0</div>
     </div>
@@ -456,10 +456,10 @@
       <div class="eq-block">$$N(t) = N_0\, e^{-\lambda t}$$</div>
       <p>N es el número de núcleos medido en el instante t; N₀ es el número inicial de núcleos (conocido); λ es la constante de decaimiento (desconocida).</p>
       <div class="xyzb-grid">
-        <label>x <input type="text" id="t2x" placeholder="ej. t"></label>
-        <label>y <input type="text" id="t2y" placeholder="ej. ln(N)"></label>
-        <label>m <input type="text" id="t2m" placeholder="ej. −λ"></label>
-        <label>b <input type="text" id="t2b" placeholder="ej. ln(N₀)"></label>
+        <label>x <input type="text" id="t2x"></label>
+        <label>y <input type="text" id="t2y"></label>
+        <label>m <input type="text" id="t2m"></label>
+        <label>b <input type="text" id="t2b"></label>
       </div>
       <div class="answer" id="t2ans">x = t, y = ln(N), m = −λ, b = ln(N₀)</div>
     </div>
@@ -469,10 +469,10 @@
       <div class="eq-block">$$R(T) = R_\infty + \frac{k}{T}$$</div>
       <p>R es la resistencia medida a la temperatura T; R∞ y k son constantes por determinar.</p>
       <div class="xyzb-grid">
-        <label>x <input type="text" id="t3x" placeholder="ej. 1/T"></label>
-        <label>y <input type="text" id="t3y" placeholder="ej. R"></label>
-        <label>m <input type="text" id="t3m" placeholder="ej. k"></label>
-        <label>b <input type="text" id="t3b" placeholder="ej. R∞"></label>
+        <label>x <input type="text" id="t3x"></label>
+        <label>y <input type="text" id="t3y"></label>
+        <label>m <input type="text" id="t3m"></label>
+        <label>b <input type="text" id="t3b"></label>
       </div>
       <div class="answer" id="t3ans">x = 1/T, y = R, m = k, b = R∞</div>
     </div>
@@ -597,19 +597,19 @@
 
     <div class="fill">
       <label for="inM">Pendiente con su incertidumbre, formato m = m̄ ± s(m):</label>
-      <input type="text" id="inM" placeholder="ej. 2.0098 ± 0.0047">
+      <input type="text" id="inM" placeholder="valor ± incertidumbre">
       <div class="answer" id="ansM">$m = (2.0098 \pm 0.0047)\ \text{s·m}^{-1/2}$</div>
     </div>
 
     <div class="fill">
       <label for="inB">Corte con su incertidumbre, formato b = b̄ ± s(b):</label>
-      <input type="text" id="inB" placeholder="ej. -0.0006 ± 0.0107">
+      <input type="text" id="inB" placeholder="valor ± incertidumbre">
       <div class="answer" id="ansB">$b = (-0.0006 \pm 0.0107)\ \text{s}$</div>
     </div>
 
     <div class="fill">
       <label for="inG">Recordando que $m = \dfrac{2\pi}{\sqrt{g}}$, estimen g (m/s²) — solo el valor central:</label>
-      <input type="text" id="inG" placeholder="ej. 9.8">
+      <input type="text" id="inG" placeholder="valor numérico">
       <div class="answer" id="ansG">$g = \left(\dfrac{2\pi}{m}\right)^2 \approx 9.77\ \text{m/s}^2$</div>
     </div>
 

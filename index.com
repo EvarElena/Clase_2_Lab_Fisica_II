@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semana 3 · Cambio de variable y regresión lineal — Física General II</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" defer></script>
+
+<style>
+  :root{
+    --paper: #F6F3EA;
+    --grid: #E3DCC8;
+    --ink: #1F2E3D;
+    --ink-soft: #52626F;
+    --brass: #B8783A;
+    --brass-dark: #8F5D28;
+    --verdigris: #4F7C6F;
+    --verdigris-bg: #E7F1EC;
+    --rust: #A8452F;
+    --rust-bg: #FAEAE5;
+    --card: #FCFAF3;
+    --border: #DCD3B8;
+    --radius: 12px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    color: var(--ink);
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    line-height: 1.55;
+    font-size: 16px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  h1,h2,h3{ font-family:'Space Grotesk', system-ui, sans-serif; color: var(--ink); line-height:1.15; margin: 0; }
+  a{ color: var(--brass-dark); }
+  code, .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  button{ font-family: inherit; cursor: pointer; }
+  button:focus-visible, a:focus-visible, [tabindex]:focus-visible{
+    outline: 3px solid var(--brass); outline-offset: 2px;
+  }
+
+  .wrap{ max-width: 880px; margin: 0 auto; padding: 0 24px 96px; }
+
+  /* ---------- Header ---------- */
+  header.top{
+    background: var(--ink);
+    color: #F3EEDD;
+    padding: 40px 24px 34px;
+    border-bottom: 6px solid var(--brass);
+  }
+  header.top .wrap{ padding-bottom:0; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+    color: #C9BFA0; margin-bottom: 10px;
+  }
+  header.top h1{
+    font-size: clamp(28px, 4.4vw, 42px);
+    color: #FBF8EF;
+    max-width: 20ch;
+  }
+  header.top p.sub{
+    margin-top: 12px; color:#D8CFB4; max-width: 60ch; font-size: 16.5px;
+  }
+
+  /* ---------- Importance banner ---------- */
+  .stamp{
+    margin: 34px 0 40px;
+    background: var(--card);
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+    padding: 22px 24px 24px;
+    position: relative;
+    box-shadow: 6px 6px 0 var(--border);
+  }
+  .stamp .tag{
+    position:absolute; top:-14px; left:22px;
+    background: var(--brass); color:#fff;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px; letter-spacing:.06em; text-transform:uppercase;
+    padding: 5px 12px; border-radius: 999px;
+    box-shadow: 0 2px 0 var(--brass-dark);
+  }
+  .stamp p{ margin: 6px 0 14px; font-size: 17px; }
+  .stamp p strong{ color: var(--rust); }
+  .skills{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+  .skills li{
+    display:flex; gap:10px; align-items:flex-start;
+    font-size: 15.5px; color: var(--ink-soft);
+  }
+  .skills li b{ color: var(--ink); }
+  .skills .check{
+    flex:none; width:20px; height:20px; border-radius:50%;
+    background: var(--verdigris); color:#fff; font-size:13px;
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+
+  /* ---------- Reading cards (source documents) ---------- */
+  h2.section-title{
+    font-size: clamp(22px, 3vw, 27px);
+    margin: 56px 0 6px;
+    display:flex; align-items:center; gap:12px;
+  }
+  h2.section-title .tile{
+    flex:none; width:34px; height:34px; border-radius: 7px 7px 4px 4px;
+    background: var(--brass); color:#fff; font-family:'IBM Plex Mono',monospace;
+    display:flex; align-items:center; justify-content:center; font-weight:600;
+    box-shadow: 0 3px 0 var(--brass-dark);
+  }
+  p.section-lede{ color: var(--ink-soft); margin: 0 0 22px; max-width: 66ch; }
+
+  .reading-grid{
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(230px, 360px));
+    gap: 16px; margin: 18px 0 26px;
+  }
+  .read-card{
+    background: var(--card); border:1px solid var(--border); border-radius: var(--radius);
+    padding: 18px 18px 16px; display:flex; flex-direction:column; gap:8px;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .read-card:hover{ transform: translateY(-3px); box-shadow: 0 8px 18px rgba(31,46,61,.10); }
+  .read-card .icon{ font-size: 22px; }
+  .read-card h3{ font-size: 16.5px; }
+  .read-card .pages{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color: var(--brass-dark);
+    background: #F0E4D2; display:inline-block; padding:3px 9px; border-radius:999px; width:fit-content;
+  }
+  .read-card p{ margin:2px 0 4px; font-size:14px; color:var(--ink-soft); }
+  .read-card a.open{
+    font-size: 14px; font-weight:600; text-decoration:none;
+    color: var(--brass-dark); margin-top:auto;
+  }
+  .read-card a.open:hover{ text-decoration: underline; }
+
+  /* ---------- Generic content blocks ---------- */
+  .card{
+    background: var(--card); border:1px solid var(--border); border-radius: var(--radius);
+    padding: 22px 24px; margin: 18px 0;
+  }
+  .card.compact{ padding: 18px 22px; }
+  .card h3{ font-size: 18px; margin-bottom: 8px; }
+  .card p{ margin: 0 0 12px; }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing:.08em;
+    text-transform: uppercase; color: var(--brass-dark); margin: 0 0 10px; font-weight:600;
+  }
+  .eq-block{ margin: 14px 0; overflow-x:auto; }
+  .note{
+    border-left: 4px solid var(--brass); background:#FBF6EA;
+    padding: 14px 16px; border-radius: 0 8px 8px 0; font-size:14.5px; color: var(--ink-soft); margin:18px 0;
+  }
+
+  /* ---------- Lego pieces / slots (Exercise A) ---------- */
+  .pool{ display:flex; flex-wrap:wrap; gap:14px; margin: 18px 0 26px; }
+  .piece{
+    position:relative;
+    background: linear-gradient(180deg,#fff, #F1EAD6);
+    border: 2px solid var(--ink);
+    border-radius: 10px 10px 5px 5px;
+    padding: 12px 18px;
+    min-width: 78px; text-align:center;
+    box-shadow: 0 3px 0 var(--border), 0 5px 10px rgba(0,0,0,.06);
+    transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+  }
+  .piece::before, .piece::after{
+    content:""; position:absolute; top:-8px; width:12px; height:8px;
+    background:#F1EAD6; border:2px solid var(--ink); border-bottom:none; border-radius:3px 3px 0 0;
+  }
+  .piece::before{ left:16px; } .piece::after{ right:16px; }
+  .piece.selected{ transform: translateY(-4px); box-shadow: 0 7px 0 var(--brass), 0 10px 14px rgba(0,0,0,.12); }
+  .piece.placed{ opacity:.3; box-shadow:none; transform:none; }
+  .piece.placed::before, .piece.placed::after{ display:none; }
+
+  .equation-row{ display:flex; align-items:center; flex-wrap:wrap; gap:12px; font-size:19px; margin: 22px 0 6px; }
+  .slot-unit{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .slot{
+    min-width: 84px; min-height: 50px; display:flex; align-items:center; justify-content:center;
+    border: 2px dashed var(--ink-soft); border-radius: 9px; background: rgba(255,255,255,.55);
+    padding: 6px 10px; transition: border-color .15s ease, background-color .15s ease;
+  }
+  .slot.filled{ border-style:solid; background:#fff; }
+  .slot.correct{ border-color: var(--verdigris); background: var(--verdigris-bg); }
+  .slot.incorrect{ border-color: var(--rust); background: var(--rust-bg); }
+  .slot-label{ font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em; }
+  .op{ font-size:20px; color: var(--ink-soft); }
+
+  .btn-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+  .btn{
+    border:2px solid var(--ink); background: var(--ink); color:#fff;
+    padding: 9px 16px; border-radius: 8px; font-size:14.5px; font-weight:600;
+    box-shadow: 0 3px 0 #0B161F;
+  }
+  .btn:active{ transform: translateY(2px); box-shadow:none; }
+  .btn.secondary{ background: transparent; color: var(--ink); box-shadow: 0 3px 0 var(--border); }
+  .btn.brass{ background: var(--brass); border-color: var(--brass-dark); box-shadow: 0 3px 0 var(--brass-dark); }
+
+  .feedback{ margin-top:14px; font-size:14.5px; font-weight:600; min-height: 20px; }
+  .feedback.ok{ color: var(--verdigris); }
+  .feedback.bad{ color: var(--rust); }
+
+  /* ---------- Reorder exercise (Exercise B) ---------- */
+  ol.steps{ list-style:none; margin:20px 0 0; padding:0; display:flex; flex-direction:column; gap:10px; counter-reset: step; }
+  ol.steps li{
+    background:#fff; border:2px solid var(--border); border-radius:10px;
+    padding: 12px 14px; display:flex; align-items:center; gap:14px;
+    transition: border-color .15s ease, background-color .15s ease;
+  }
+  ol.steps li.correct{ border-color: var(--verdigris); background: var(--verdigris-bg); }
+  ol.steps li.incorrect{ border-color: var(--rust); background: var(--rust-bg); }
+  ol.steps li .pos{
+    font-family:'IBM Plex Mono',monospace; font-weight:600; color: var(--brass-dark);
+    flex:none; width: 22px; text-align:center;
+  }
+  ol.steps li .content{ flex:1; min-width:0; }
+  ol.steps li .content .label{ font-size:12.5px; color:var(--ink-soft); margin-bottom:2px; }
+  ol.steps li .movebtns{ display:flex; flex-direction:column; gap:3px; flex:none; }
+  ol.steps li .movebtns button{
+    border:1px solid var(--border); background:#fff; border-radius:5px; width:26px; height:22px; font-size:12px; line-height:1;
+  }
+  ol.steps li .movebtns button:disabled{ opacity:.3; cursor:default; }
+
+  /* ---------- MCQ ---------- */
+  .mcq{ margin: 4px 0; }
+  .mcq + .mcq{ margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .mcq p.q{ font-weight:600; margin-bottom:10px; }
+  .mcq .opts{ display:grid; gap:8px; }
+  .mcq .opt{
+    text-align:left; background:#fff; border:2px solid var(--border); border-radius:9px;
+    padding: 10px 14px; font-size:14.5px; color:var(--ink);
+  }
+  .mcq .opt.correct{ border-color: var(--verdigris); background: var(--verdigris-bg); }
+  .mcq .opt.incorrect{ border-color: var(--rust); background: var(--rust-bg); }
+  .mcq .opt:disabled{ cursor: not-allowed; opacity: .55; }
+  .mcq .explain{ font-size:13.5px; margin-top:8px; display:none; }
+  .mcq .explain.show{ display:block; }
+  .mcq .explain.ok{ color: var(--verdigris); font-weight:600; }
+  .mcq .explain.bad{ color: var(--rust); }
+
+  /* ---------- Fill-in (Section 3) ---------- */
+  .readout{
+    font-family:'IBM Plex Mono', monospace; font-size: 13.5px;
+    background: var(--ink); color:#EFEADA; border-radius:9px; padding:16px 18px;
+    display:grid; grid-template-columns: 1fr 1fr; gap: 6px 22px; margin: 16px 0 24px;
+  }
+  .fill{ margin: 18px 0; }
+  .fill label{ display:block; font-size:14px; font-weight:600; margin-bottom:6px; }
+  .fill input[type=text]{
+    width:100%; max-width:360px; padding:9px 12px; border-radius:8px;
+    border:2px solid var(--border); font-family:'IBM Plex Mono',monospace; font-size:14.5px;
+  }
+  .fill input.correct{ border-color: var(--verdigris); background: var(--verdigris-bg); }
+  .fill input.incorrect{ border-color: var(--rust); background: var(--rust-bg); }
+  .fill .answer{
+    display:none; margin-top:8px; font-size:14px; color: var(--verdigris);
+    background: var(--verdigris-bg); border-radius:8px; padding:8px 12px; width:fit-content;
+  }
+  .fill .answer.show{ display:block; }
+
+  footer{
+    margin-top: 60px; padding: 26px 24px 40px; text-align:center;
+    color: var(--ink-soft); font-size: 13.5px;
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">TEC · Escuela de Física · Laboratorio de Física General II</div>
+    <h1>Semana 3 — Cambio de variable y regresión lineal</h1>
+    <p class="sub">Trabajo asincrónico. Cada bloque de lectura va seguido de su ejercicio — lean primero, luego practiquen. Los ejercicios muestran la respuesta correcta al verificar.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="stamp">
+    <span class="tag">Por qué importa</span>
+    <p><strong>Estos contenidos se usan en todas las prácticas restantes del curso.</strong> Cada informe de laboratorio les va a pedir linealizar una relación física y reportar una pendiente o un corte con su incertidumbre — no son temas aislados de esta semana.</p>
+    <ul class="skills">
+      <li><span class="check">✓</span> <span><b>Cambio de variable:</b> reconocer cómo convertir una relación no lineal en la forma $y = mx + b$.</span></li>
+      <li><span class="check">✓</span> <span><b>Incertidumbre de m y b:</b> calcular la incertidumbre de la pendiente y el corte con el eje a partir de la función <code>ESTIMACION.LINEAL</code> de Excel.</span></li>
+    </ul>
+  </div>
+
+  <!-- ======================= SECCIÓN 1 ======================= -->
+  <h2 class="section-title"><span class="tile">1</span> Cambio de variable</h2>
+  <p class="section-lede">Un cambio de variable reescribe una relación física no lineal en la forma $y = mx + b$, para poder ajustarla por mínimos cuadrados.</p>
+
+  <div class="reading-grid">
+    <div class="read-card">
+      <div class="icon">📄</div>
+      <h3>Cambio de variable</h3>
+      <span class="pages">14 páginas</span>
+      <p>Qué es un cambio de variable y cómo aplicarlo, con los ejemplos del péndulo simple y el péndulo físico.</p>
+      <a class="open" href="https://tecdigital.tec.ac.cr/dotlrn/catedras.tec/catedralaboratoriofsicageneralii/file-storage/view/semana-03%2Fcambio_de_variable.pdf" target="_blank" rel="noopener noreferrer">Abrir documento →</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="kicker">📖 Lectura</p>
+    <h3>Cómo se hace un cambio de variable</h3>
+    <p>Para el péndulo simple, la relación teórica es:</p>
+    <div class="eq-block">$$T = 2\pi\sqrt{\frac{L}{g}}$$</div>
+    <p><strong>Paso 1 — Identificar.</strong> $T$ y $L$ son las variables medidas; $g$ es la constante por determinar; $2\pi$ es una constante conocida.</p>
+    <p><strong>Paso 2 — Reescribir como recta.</strong> Se separan las constantes de las variables:</p>
+    <div class="eq-block">$$T = \left(\frac{2\pi}{\sqrt{g}}\right)\sqrt{L}$$</div>
+    <p><strong>Paso 3 — Comparar con $y = mx + b$.</strong> Con la ecuación ya escrita como constante · variable, se compara término a término, usando el péndulo simple como contexto:</p>
+    <div class="eq-block">$$T = \left(\frac{2\pi}{\sqrt{g}}\right)\sqrt{L} + 0$$</div>
+    <p>Comparando con $y = mx + b$: &nbsp; $y = T$, &nbsp; $m = \dfrac{2\pi}{\sqrt{g}}$, &nbsp; $x = \sqrt{L}$, &nbsp; $b = 0$.</p>
+    <p>Note que $m$ y $b$ quedaron formados <em>solo por constantes</em> ($2\pi$ y $g$); las variables medidas ($T$ y $L$) se reubicaron completas dentro de la nueva $y$ y la nueva $x$.</p>
+  </div>
+
+  <div class="card compact">
+    <p class="kicker">🧠 Comprueben que entendieron</p>
+    <div class="mcq">
+      <p class="q">¿Por qué se hace un cambio de variable antes de graficar los datos?</p>
+      <div class="opts">
+        <button class="opt" data-fb="La estética no es la razón — hay una limitación matemática de fondo.">Porque una gráfica lineal siempre se ve más profesional</button>
+        <button class="opt" data-correct="true" data-fb="Exacto: si la relación no es lineal, primero hay que transformarla a y = mx + b para poder ajustarla.">Porque mínimos cuadrados (y ESTIMACION.LINEAL) solo ajustan relaciones de la forma y = mx + b</button>
+        <button class="opt" data-fb="El cambio de variable no afecta cuántos datos hay que tomar.">Porque reduce el número de mediciones que hay que tomar</button>
+        <button class="opt" data-fb="La incertidumbre de los instrumentos no desaparece por reescribir la ecuación.">Porque elimina la incertidumbre de los instrumentos</button>
+      </div>
+      <p class="explain"></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="kicker">✏️ Ejercicio</p>
+    <h3>Arma la ecuación</h3>
+    <p>Retomando el péndulo simple ya reordenado:</p>
+    <div class="eq-block">$$T = \left(\frac{2\pi}{\sqrt{g}}\right)\sqrt{L}$$</div>
+    <p>Hagan clic en cada pieza y luego en la casilla donde creen que va, para armar $y = m \cdot x + b$.</p>
+
+    <div class="pool" id="poolA">
+      <button class="piece" data-role="y" data-tex="T">$T$</button>
+      <button class="piece" data-role="m" data-tex="\dfrac{2\pi}{\sqrt{g}}">$\dfrac{2\pi}{\sqrt{g}}$</button>
+      <button class="piece" data-role="x" data-tex="\sqrt{L}">$\sqrt{L}$</button>
+      <button class="piece" data-role="b" data-tex="0">$0$</button>
+    </div>
+
+    <div class="equation-row">
+      <div class="slot-unit"><div class="slot" data-role="y" id="slot-y"></div><span class="slot-label">y</span></div>
+      <span class="op">=</span>
+      <div class="slot-unit"><div class="slot" data-role="m" id="slot-m"></div><span class="slot-label">m</span></div>
+      <span class="op">·</span>
+      <div class="slot-unit"><div class="slot" data-role="x" id="slot-x"></div><span class="slot-label">x</span></div>
+      <span class="op">+</span>
+      <div class="slot-unit"><div class="slot" data-role="b" id="slot-b"></div><span class="slot-label">b</span></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn brass" id="verifyA">Verificar</button>
+      <button class="btn secondary" id="solveA">Ver solución</button>
+      <button class="btn secondary" id="resetA">Reiniciar</button>
+    </div>
+    <div class="feedback" id="feedbackA" aria-live="polite"></div>
+  </div>
+
+  <div class="card compact">
+    <p class="kicker">🧠 Comprueben que entendieron</p>
+    <div class="mcq">
+      <p class="q">En la ecuación linealizada y = mx + b, ¿qué NUNCA debería quedar escondido dentro de m o de b?</p>
+      <div class="opts">
+        <button class="opt" data-fb="Las constantes conocidas sí pueden (y deben) quedar dentro de m o b.">Una constante conocida, como 2π</button>
+        <button class="opt" data-correct="true" data-fb="Correcto: toda variable medida debe reubicarse completa en la nueva x o la nueva y, nunca quedar atrapada en m o b.">Una variable que se mide en el experimento</button>
+        <button class="opt" data-fb="Las constantes por determinar son justamente lo que se espera encontrar dentro de m o b.">Una constante por determinar, como g</button>
+        <button class="opt" data-fb="Un valor de cero (como en b = 0) es perfectamente válido dentro de la ecuación linealizada.">El número cero</button>
+      </div>
+      <p class="explain"></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="kicker">📖 Lectura</p>
+    <h3>Cuando hace falta más álgebra</h3>
+    <p>El péndulo físico tiene <strong>dos</strong> constantes por determinar ($g$ e $I_{cm}$), no una sola:</p>
+    <div class="eq-block">$$T = 2\pi\sqrt{\frac{I_{cm}+md^2}{mgd}}$$</div>
+    <p>Con dos incógnitas, no basta un cambio de variable tan directo como en el péndulo simple: $T$ y $d$ (las dos variables medidas) deben terminar completas dentro de la nueva $y$ y la nueva $x$, así que hace falta elevar al cuadrado, multiplicar por $d$ y reagrupar antes de poder comparar con $y=mx+b$. El siguiente ejercicio ordena exactamente esos pasos.</p>
+  </div>
+
+  <div class="card">
+    <p class="kicker">✏️ Ejercicio</p>
+    <h3>Ordena el procedimiento</h3>
+    <p>Usen las flechas para ordenar estos cuatro pasos del cambio de variable, del primero al último.</p>
+    <ol class="steps" id="stepsB"></ol>
+    <div class="btn-row">
+      <button class="btn brass" id="verifyB">Verificar orden</button>
+      <button class="btn secondary" id="solveB">Ver orden correcto</button>
+    </div>
+    <div class="feedback" id="feedbackB" aria-live="polite"></div>
+  </div>
+
+  <!-- ======================= SECCIÓN 2 ======================= -->
+  <h2 class="section-title"><span class="tile">2</span> Regresión lineal y mínimos cuadrados</h2>
+  <p class="section-lede">Mínimos cuadrados encuentra la pendiente $m$, el corte $b$ y el coeficiente de correlación $r$ que mejor ajustan un conjunto de datos $(x_i, y_i)$.</p>
+
+  <div class="reading-grid">
+    <div class="read-card">
+      <div class="icon">📄</div>
+      <h3>Regresión lineal y mínimos cuadrados</h3>
+      <span class="pages">10 páginas</span>
+      <p>Qué es la regresión lineal y las tres formas de obtener m, b y r: ecuaciones, gráfico de Excel y ESTIMACION.LINEAL.</p>
+      <a class="open" href="https://tecdigital.tec.ac.cr/dotlrn/catedras.tec/catedralaboratoriofsicageneralii/file-storage/view/semana-03%2FRegresi%C3%B3n_lineal_y_m%C3%ADnimos_cuadrados_IIS_24.pdf" target="_blank" rel="noopener noreferrer">Abrir documento →</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="kicker">📖 Lectura</p>
+    <h3>Mínimos cuadrados, en corto</h3>
+    <p>Mínimos cuadrados encuentra la recta $y = mx+b$ que minimiza el error cuadrático entre los datos y el modelo. Hay tres formas de obtenerla: con las ecuaciones directamente, con la línea de tendencia del gráfico de Excel, o con <code>ESTIMACION.LINEAL</code> — esta última es la única que, además de m y b, entrega su incertidumbre.</p>
+  </div>
+
+  <div class="card">
+    <p class="kicker">✏️ Ejercicio</p>
+    <h3>Repaso rápido</h3>
+    <div class="mcq">
+      <p class="q">1. ¿Cuál es una ventaja real de usar <code>ESTIMACION.LINEAL</code> sobre solo poner la línea de tendencia en el gráfico de Excel?</p>
+      <div class="opts">
+        <button class="opt" data-fb="ESTIMACION.LINEAL no genera ningún gráfico.">Genera un gráfico más bonito</button>
+        <button class="opt" data-correct="true" data-fb="Así es: es la única de las tres formas que entrega directamente s(m) y s(b).">Entrega las desviaciones estándar s(m) y s(b)</button>
+        <button class="opt" data-fb="Sí necesita los datos x, y para poder calcular algo.">No necesita datos numéricos</button>
+        <button class="opt" data-fb="La pendiente depende de la relación entre x y y; hacen falta ambos conjuntos de datos.">Calcula la pendiente sin necesidad de datos de y</button>
+      </div>
+      <p class="explain"></p>
+    </div>
+
+    <div class="mcq">
+      <p class="q">2. El método de mínimos cuadrados encuentra la recta que minimiza...</p>
+      <div class="opts">
+        <button class="opt" data-fb="El número de mediciones lo decide quien diseña el experimento, no el método de ajuste.">el número de mediciones</button>
+        <button class="opt" data-correct="true" data-fb="Correcto — de ahí el nombre 'mínimos cuadrados'.">el error cuadrático entre los datos y el modelo</button>
+        <button class="opt" data-fb="El método no optimiza tiempo de cómputo.">el tiempo de cálculo</button>
+        <button class="opt" data-fb="La pendiente es un resultado del ajuste, no lo que se minimiza.">el valor de la pendiente</button>
+      </div>
+      <p class="explain"></p>
+    </div>
+
+    <div class="mcq">
+      <p class="q">3. En una gráfica de dispersión con ajuste lineal, ¿qué representa la línea de mejor ajuste?</p>
+      <div class="opts">
+        <button class="opt" data-fb="Los datos crudos son los puntos graficados, no la línea.">Los datos crudos sin procesar</button>
+        <button class="opt" data-correct="true" data-fb="Exacto — es el resultado del ajuste por mínimos cuadrados.">El modelo lineal que mejor aproxima los datos graficados</button>
+        <button class="opt" data-fb="El error de cada punto es la distancia entre el dato y la línea, no la línea misma.">El error de cada punto individual</button>
+        <button class="opt" data-fb="La incertidumbre se calcula aparte, con s(m) y s(b).">La incertidumbre total del experimento</button>
+      </div>
+      <p class="explain"></p>
+    </div>
+  </div>
+
+  <!-- ======================= SECCIÓN 3 ======================= -->
+  <h2 class="section-title"><span class="tile">3</span> Incertidumbre en la regresión</h2>
+  <p class="section-lede">Según la GUM, las incertidumbres estándar tipo A de $m$ y $b$ son sus desviaciones estándar: $u(m) = s(m)$ y $u(b) = s(b)$.</p>
+
+  <div class="reading-grid">
+    <div class="read-card">
+      <div class="icon">📄</div>
+      <h3>Evaluación de la incertidumbre en una regresión</h3>
+      <span class="pages">3 páginas</span>
+      <p>Cómo usar ESTIMACION.LINEAL y ESTIMACION.LOGARITMICA en Excel para obtener la incertidumbre de m y b, según la GUM.</p>
+      <a class="open" href="https://tecdigital.tec.ac.cr/dotlrn/catedras.tec/catedralaboratoriofsicageneralii/file-storage/view/semana-03%2FIncertidumbre_regresion_v2.pdf" target="_blank" rel="noopener noreferrer">Abrir documento →</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="kicker">📖 Lectura</p>
+    <h3>La incertidumbre de m y b</h3>
+    <p>Según la GUM, $u(m) = s(m)$ y $u(b) = s(b)$: la incertidumbre de la pendiente y del corte son, directamente, sus desviaciones estándar. <code>ESTIMACION.LINEAL</code> las calcula automáticamente, junto con m, b y r², sin necesidad de fórmulas adicionales.</p>
+  </div>
+
+  <div class="card compact">
+    <p class="kicker">🧠 Comprueben que entendieron</p>
+    <div class="mcq">
+      <p class="q">Además del valor de m y de b, ¿qué otro resultado clave entrega ESTIMACION.LINEAL?</p>
+      <div class="opts">
+        <button class="opt" data-fb="Excel no interpreta el significado físico de las variables.">El nombre de la variable dependiente</button>
+        <button class="opt" data-correct="true" data-fb="Correcto — y son, directamente, la incertidumbre estándar tipo A según la GUM.">Las incertidumbres s(m) y s(b) de la pendiente y del corte</button>
+        <button class="opt" data-fb="ESTIMACION.LINEAL entrega números, no una gráfica.">La gráfica ya lista para imprimir</button>
+        <button class="opt" data-fb="g hay que despejarlo aparte a partir de m; Excel no conoce el significado físico de la pendiente.">El valor de g automáticamente, sin cálculos adicionales</button>
+      </div>
+      <p class="explain"></p>
+    </div>
+  </div>
+
+  <div class="note">
+    💡 <strong>Practíquenlo de verdad.</strong> No basta con leer esto: abran Excel, usen sus propios datos (o los del documento) y corran <code>ESTIMACION.LINEAL</code> ustedes mismos, siguiendo los pasos exactos de la guía de incertidumbre. La van a necesitar en cada práctica del semestre.
+  </div>
+
+  <div class="card">
+    <p class="kicker">✏️ Ejercicio</p>
+    <h3>Lean la salida de Excel</h3>
+    <p>Con los datos del péndulo simple ($\sqrt{L}$ vs $T$), <code>ESTIMACION.LINEAL</code> entregó esta salida:</p>
+    <div class="readout">
+      <div>m = 2.0098</div><div>b = −0.0006</div>
+      <div>s(m) = 0.0047</div><div>s(b) = 0.0107</div>
+      <div>r² = 0.9999</div><div>s_y,x = 0.0090</div>
+    </div>
+
+    <div class="fill">
+      <label for="inM">Pendiente con su incertidumbre, formato m = m̄ ± s(m):</label>
+      <input type="text" id="inM" placeholder="ej. 2.0098 ± 0.0047">
+      <div class="answer" id="ansM">$m = (2.0098 \pm 0.0047)\ \text{s·m}^{-1/2}$</div>
+    </div>
+
+    <div class="fill">
+      <label for="inB">Corte con su incertidumbre, formato b = b̄ ± s(b):</label>
+      <input type="text" id="inB" placeholder="ej. -0.0006 ± 0.0107">
+      <div class="answer" id="ansB">$b = (-0.0006 \pm 0.0107)\ \text{s}$</div>
+    </div>
+
+    <div class="fill">
+      <label for="inG">Recordando que $m = \dfrac{2\pi}{\sqrt{g}}$, estimen g (m/s²) — solo el valor central:</label>
+      <input type="text" id="inG" placeholder="ej. 9.8">
+      <div class="answer" id="ansG">$g = \left(\dfrac{2\pi}{m}\right)^2 \approx 9.77\ \text{m/s}^2$</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn brass" id="verifyC">Verificar respuestas</button>
+      <button class="btn secondary" id="solveC">Ver respuestas</button>
+    </div>
+    <div class="feedback" id="feedbackC" aria-live="polite"></div>
+  </div>
+
+</div>
+
+<footer>
+  Laboratorio de Física General II · Instituto Tecnológico de Costa Rica<br>
+  Repasen esta página cuantas veces necesiten — la incertidumbre de m y b les va a servir en cada práctica del semestre.
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  // ---------- Helper: typeset a set of nodes ----------
+  function typeset(nodes) {
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise(nodes).catch(function(){});
+    }
+  }
+
+  // ================= EXERCISE A: piece matching =================
+  (function () {
+    var pool = document.getElementById('poolA');
+    var pieces = Array.prototype.slice.call(pool.querySelectorAll('.piece'));
+    var slots = Array.prototype.slice.call(document.querySelectorAll('.equation-row .slot'));
+    var feedback = document.getElementById('feedbackA');
+    var selected = null;
+
+    function clearSelection() {
+      pieces.forEach(function (p) { p.classList.remove('selected'); });
+      selected = null;
+    }
+
+    function placePiece(piece, slot) {
+      if (slot.dataset.pieceRole) {
+        var prev = pieces.filter(function (p) { return p.dataset.role === slot.dataset.pieceRole; })[0];
+        if (prev) prev.classList.remove('placed');
+      }
+      slot.dataset.pieceRole = piece.dataset.role;
+      slot.innerHTML = '$' + piece.dataset.tex + '$';
+      slot.classList.add('filled');
+      slot.classList.remove('correct', 'incorrect');
+      piece.classList.add('placed');
+      typeset([slot]);
+    }
+
+    pieces.forEach(function (piece) {
+      piece.addEventListener('click', function () {
+        if (piece.classList.contains('placed')) return;
+        if (selected === piece) { clearSelection(); return; }
+        clearSelection();
+        piece.classList.add('selected');
+        selected = piece;
+      });
+    });
+
+    slots.forEach(function (slot) {
+      slot.addEventListener('click', function () {
+        if (selected) {
+          placePiece(selected, slot);
+          clearSelection();
+        } else if (slot.dataset.pieceRole) {
+          var owner = pieces.filter(function (p) { return p.dataset.role === slot.dataset.pieceRole; })[0];
+          if (owner) owner.classList.remove('placed');
+          slot.innerHTML = '';
+          slot.dataset.pieceRole = '';
+          slot.classList.remove('filled', 'correct', 'incorrect');
+        }
+      });
+    });
+
+    document.getElementById('verifyA').addEventListener('click', function () {
+      var allFilled = true, allCorrect = true;
+      slots.forEach(function (slot) {
+        slot.classList.remove('correct', 'incorrect');
+        if (!slot.dataset.pieceRole) { allFilled = false; return; }
+        if (slot.dataset.pieceRole === slot.dataset.role) {
+          slot.classList.add('correct');
+        } else {
+          slot.classList.add('incorrect');
+          allCorrect = false;
+        }
+      });
+      if (!allFilled) {
+        feedback.textContent = 'Coloquen una pieza en cada casilla antes de verificar.';
+        feedback.className = 'feedback bad';
+      } else if (allCorrect) {
+        feedback.textContent = '¡Correcto! Esa es la asignación de la diapositiva 9.';
+        feedback.className = 'feedback ok';
+      } else {
+        feedback.textContent = 'Todavía hay piezas en la casilla equivocada — las rojas no coinciden.';
+        feedback.className = 'feedback bad';
+      }
+    });
+
+    document.getElementById('solveA').addEventListener('click', function () {
+      slots.forEach(function (slot) {
+        if (slot.dataset.pieceRole) {
+          var owner = pieces.filter(function (p) { return p.dataset.role === slot.dataset.pieceRole; })[0];
+          if (owner) owner.classList.remove('placed');
+        }
+        var correctPiece = pieces.filter(function (p) { return p.dataset.role === slot.dataset.role; })[0];
+        placePiece(correctPiece, slot);
+        slot.classList.add('correct');
+      });
+      clearSelection();
+      feedback.innerHTML = 'Solución mostrada: $y=T,\\ m=\\tfrac{2\\pi}{\\sqrt{g}},\\ x=\\sqrt{L},\\ b=0$.';
+      feedback.classList.remove('bad');
+      feedback.classList.add('feedback', 'ok');
+      typeset([feedback]);
+    });
+
+    document.getElementById('resetA').addEventListener('click', function () {
+      slots.forEach(function (slot) {
+        slot.innerHTML = '';
+        slot.dataset.pieceRole = '';
+        slot.classList.remove('filled', 'correct', 'incorrect');
+      });
+      pieces.forEach(function (p) { p.classList.remove('placed', 'selected'); });
+      selected = null;
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+    });
+  })();
+
+  // ================= EXERCISE B: reorder steps =================
+  (function () {
+    var STEPS = [
+      { id: 0, label: 'Ecuación original', tex: 'T = 2\\pi\\sqrt{\\dfrac{I_{cm}+md^2}{mgd}}' },
+      { id: 1, label: 'Elevar ambos lados al cuadrado', tex: 'T^2 = 4\\pi^2\\,\\dfrac{I_{cm}+md^2}{mgd}' },
+      { id: 2, label: 'Multiplicar por d y separar constantes', tex: 'T^2 d = \\dfrac{4\\pi^2}{g}\\,d^2 + \\dfrac{4\\pi^2 I_{cm}}{mg}' },
+      { id: 3, label: 'Forma lineal final', tex: 'y=mx+b,\\quad y=T^2d,\\ \\ x=d^2' }
+    ];
+    var order = [2, 0, 3, 1];
+    var list = document.getElementById('stepsB');
+    var feedback = document.getElementById('feedbackB');
+
+    function render() {
+      list.innerHTML = '';
+      order.forEach(function (id, idx) {
+        var step = STEPS[id];
+        var li = document.createElement('li');
+        li.innerHTML =
+          '<span class="pos">' + (idx + 1) + '</span>' +
+          '<span class="content"><div class="label">' + step.label + '</div>$' + step.tex + '$</span>' +
+          '<span class="movebtns">' +
+            '<button type="button" data-dir="up" ' + (idx === 0 ? 'disabled' : '') + '>▲</button>' +
+            '<button type="button" data-dir="down" ' + (idx === order.length - 1 ? 'disabled' : '') + '>▼</button>' +
+          '</span>';
+        li.querySelector('[data-dir="up"]').addEventListener('click', function () { move(idx, -1); });
+        li.querySelector('[data-dir="down"]').addEventListener('click', function () { move(idx, 1); });
+        list.appendChild(li);
+      });
+      typeset([list]);
+    }
+
+    function move(idx, dir) {
+      var j = idx + dir;
+      if (j < 0 || j >= order.length) return;
+      var tmp = order[idx]; order[idx] = order[j]; order[j] = tmp;
+      render();
+    }
+
+    document.getElementById('verifyB').addEventListener('click', function () {
+      var items = list.querySelectorAll('li');
+      var allCorrect = true;
+      order.forEach(function (id, idx) {
+        items[idx].classList.remove('correct', 'incorrect');
+        if (id === idx) {
+          items[idx].classList.add('correct');
+        } else {
+          items[idx].classList.add('incorrect');
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect
+        ? '¡Correcto! Ese es el orden: elevar al cuadrado, multiplicar por d, y despejar la forma lineal.'
+        : 'Aún hay pasos fuera de lugar (marcados en rojo). Usen las flechas para reordenar.';
+      feedback.className = 'feedback ' + (allCorrect ? 'ok' : 'bad');
+    });
+
+    document.getElementById('solveB').addEventListener('click', function () {
+      order = [0, 1, 2, 3];
+      render();
+      var items = list.querySelectorAll('li');
+      items.forEach(function (li) { li.classList.add('correct'); });
+      feedback.textContent = 'Orden correcto mostrado.';
+      feedback.className = 'feedback ok';
+    });
+
+    render();
+  })();
+
+  // ================= MCQ (all sections): random order + per-option feedback =================
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  document.querySelectorAll('.mcq').forEach(function (mcq) {
+    var container = mcq.querySelector('.opts');
+    var opts = Array.prototype.slice.call(container.querySelectorAll('.opt'));
+    shuffle(opts).forEach(function (o) { container.appendChild(o); }); // randomize visual order
+
+    var explain = mcq.querySelector('.explain');
+    var answered = false;
+
+    opts.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (answered) return;
+        opts.forEach(function (o) { o.classList.remove('correct', 'incorrect'); });
+        var isCorrect = opt.dataset.correct === 'true';
+        opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+        explain.textContent = (isCorrect ? '' : 'Todavía no — ') + (opt.dataset.fb || '');
+        explain.classList.remove('ok', 'bad');
+        explain.classList.add('show', isCorrect ? 'ok' : 'bad');
+
+        if (isCorrect) {
+          answered = true;
+          opts.forEach(function (o) { o.disabled = true; });
+        }
+      });
+    });
+  });
+
+  // ================= SECTION 3: fill-in =================
+  (function () {
+    function norm(v) { return v.replace(/\s+/g, '').replace(/\u2212/g, '-').replace(/,/g, '.'); }
+
+    var inM = document.getElementById('inM'), inB = document.getElementById('inB'), inG = document.getElementById('inG');
+    var ansM = document.getElementById('ansM'), ansB = document.getElementById('ansB'), ansG = document.getElementById('ansG');
+    var feedback = document.getElementById('feedbackC');
+
+    function checkM() {
+      var v = norm(inM.value);
+      var ok = v.indexOf('2.0098') !== -1 && v.indexOf('0.0047') !== -1;
+      inM.classList.remove('correct', 'incorrect');
+      inM.classList.add(ok ? 'correct' : 'incorrect');
+      return ok;
+    }
+    function checkB() {
+      var v = norm(inB.value);
+      var ok = (v.indexOf('-0.0006') !== -1 || v.indexOf('0.0006') !== -1) && v.indexOf('0.0107') !== -1;
+      inB.classList.remove('correct', 'incorrect');
+      inB.classList.add(ok ? 'correct' : 'incorrect');
+      return ok;
+    }
+    function checkG() {
+      var v = parseFloat(norm(inG.value));
+      var ok = !isNaN(v) && v >= 9.5 && v <= 10.05;
+      inG.classList.remove('correct', 'incorrect');
+      inG.classList.add(ok ? 'correct' : 'incorrect');
+      return ok;
+    }
+
+    document.getElementById('verifyC').addEventListener('click', function () {
+      var okM = checkM(), okB = checkB(), okG = checkG();
+      if (okM && okB && okG) {
+        feedback.textContent = '¡Las tres respuestas son correctas!';
+        feedback.className = 'feedback ok';
+      } else {
+        feedback.textContent = 'Alguna respuesta no coincide todavía (en rojo). Revisen el formato y los signos.';
+        feedback.className = 'feedback bad';
+      }
+    });
+
+    document.getElementById('solveC').addEventListener('click', function () {
+      [ansM, ansB, ansG].forEach(function (a) { a.classList.add('show'); });
+      typeset([ansM, ansB, ansG]);
+    });
+  })();
+
+});
+</script>
+
+</body>
+</html>

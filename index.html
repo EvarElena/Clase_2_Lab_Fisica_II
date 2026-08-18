@@ -265,24 +265,38 @@
   .mcq .explain.bad{ color: var(--rust); }
 
   /* ---------- Fill-in (Section 3) ---------- */
-  .readout{
-    font-family:'IBM Plex Mono', monospace; font-size: 13.5px;
-    background: var(--ink); color:#EFEADA; border-radius:9px; padding:16px 18px;
-    display:grid; grid-template-columns: 1fr 1fr; gap: 6px 22px; margin: 16px 0 24px;
+  .xl-wrap{ overflow-x:auto; margin: 16px 0 26px; }
+  .xl{
+    border-collapse: collapse; font-family:'IBM Plex Mono', monospace; font-size: 13.5px;
+    background:#fff; box-shadow: 0 2px 10px rgba(31,46,61,.08);
   }
+  .xl th, .xl td{ border: 1px solid #C9C2AA; padding: 7px 16px; text-align:right; min-width: 92px; }
+  .xl th{ background:#EFE9D6; color: var(--ink-soft); font-weight:600; text-align:center; }
+  .xl th.corner{ background:#E3DCC8; }
+  .xl td.rownum{ background:#EFE9D6; color: var(--ink-soft); text-align:center; font-weight:600; }
+  .xl td.cell{ color: var(--ink); }
   .fill{ margin: 18px 0; }
   .fill label{ display:block; font-size:14px; font-weight:600; margin-bottom:6px; }
   .fill input[type=text]{
     width:100%; max-width:360px; padding:9px 12px; border-radius:8px;
     border:2px solid var(--border); font-family:'IBM Plex Mono',monospace; font-size:14.5px;
   }
-  .fill input.correct{ border-color: var(--verdigris); background: var(--verdigris-bg); }
-  .fill input.incorrect{ border-color: var(--rust); background: var(--rust-bg); }
-  .fill .answer{
+  .fill input.correct, .xyzb-grid input.correct{ border-color: var(--verdigris); background: var(--verdigris-bg); }
+  .fill input.incorrect, .xyzb-grid input.incorrect{ border-color: var(--rust); background: var(--rust-bg); }
+  .answer{
     display:none; margin-top:8px; font-size:14px; color: var(--verdigris);
     background: var(--verdigris-bg); border-radius:8px; padding:8px 12px; width:fit-content;
   }
-  .fill .answer.show{ display:block; }
+  .answer.show{ display:block; }
+
+  .transfer-item{ margin: 20px 0 0; padding-top:18px; border-top:1px solid var(--border); }
+  .transfer-item:first-of-type{ border-top:none; padding-top:0; }
+  .xyzb-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap:10px; margin: 12px 0 4px; max-width: 520px; }
+  .xyzb-grid label{ font-size:12.5px; font-weight:600; color:var(--ink-soft); display:flex; flex-direction:column; gap:4px; text-transform:uppercase; letter-spacing:.03em; }
+  .xyzb-grid input[type=text]{
+    padding:8px 10px; border-radius:7px; border:2px solid var(--border);
+    font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:400; text-transform:none; letter-spacing:normal;
+  }
 
   footer{
     margin-top: 60px; padding: 26px 24px 40px; text-align:center;
@@ -419,6 +433,57 @@
     <div class="feedback" id="feedbackB" aria-live="polite"></div>
   </div>
 
+  <div class="card">
+    <p class="kicker">✏️ Ejercicio</p>
+    <h3>Practiquen con casos nuevos</h3>
+    <p>Estas tres relaciones no aparecen en ninguna lectura — aplíquenles el mismo procedimiento (Pasos 1-3) para identificar x, y, m y b.</p>
+
+    <div class="transfer-item">
+      <p><strong>1. Iluminancia de una fuente puntual</strong></p>
+      <div class="eq-block">$$E(d) = \frac{I}{d^2}$$</div>
+      <p>E es la iluminancia medida a una distancia d de la fuente; I es la intensidad luminosa de la fuente (desconocida).</p>
+      <div class="xyzb-grid">
+        <label>x <input type="text" id="t1x" placeholder="ej. 1/d²"></label>
+        <label>y <input type="text" id="t1y" placeholder="ej. E"></label>
+        <label>m <input type="text" id="t1m" placeholder="ej. I"></label>
+        <label>b <input type="text" id="t1b" placeholder="ej. 0"></label>
+      </div>
+      <div class="answer" id="t1ans">x = 1/d², y = E, m = I, b = 0</div>
+    </div>
+
+    <div class="transfer-item">
+      <p><strong>2. Decaimiento radiactivo</strong></p>
+      <div class="eq-block">$$N(t) = N_0\, e^{-\lambda t}$$</div>
+      <p>N es el número de núcleos medido en el instante t; N₀ es el número inicial de núcleos (conocido); λ es la constante de decaimiento (desconocida).</p>
+      <div class="xyzb-grid">
+        <label>x <input type="text" id="t2x" placeholder="ej. t"></label>
+        <label>y <input type="text" id="t2y" placeholder="ej. ln(N)"></label>
+        <label>m <input type="text" id="t2m" placeholder="ej. −λ"></label>
+        <label>b <input type="text" id="t2b" placeholder="ej. ln(N₀)"></label>
+      </div>
+      <div class="answer" id="t2ans">x = t, y = ln(N), m = −λ, b = ln(N₀)</div>
+    </div>
+
+    <div class="transfer-item">
+      <p><strong>3. Resistencia de un termistor</strong></p>
+      <div class="eq-block">$$R(T) = R_\infty + \frac{k}{T}$$</div>
+      <p>R es la resistencia medida a la temperatura T; R∞ y k son constantes por determinar.</p>
+      <div class="xyzb-grid">
+        <label>x <input type="text" id="t3x" placeholder="ej. 1/T"></label>
+        <label>y <input type="text" id="t3y" placeholder="ej. R"></label>
+        <label>m <input type="text" id="t3m" placeholder="ej. k"></label>
+        <label>b <input type="text" id="t3b" placeholder="ej. R∞"></label>
+      </div>
+      <div class="answer" id="t3ans">x = 1/T, y = R, m = k, b = R∞</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn brass" id="verifyT">Verificar respuestas</button>
+      <button class="btn secondary" id="solveT">Ver respuestas</button>
+    </div>
+    <div class="feedback" id="feedbackT" aria-live="polite"></div>
+  </div>
+
   <!-- ======================= SECCIÓN 2 ======================= -->
   <h2 class="section-title"><span class="tile">2</span> Regresión lineal y mínimos cuadrados</h2>
   <p class="section-lede">Mínimos cuadrados encuentra la pendiente $m$, el corte $b$ y el coeficiente de correlación $r$ que mejor ajustan un conjunto de datos $(x_i, y_i)$.</p>
@@ -517,12 +582,18 @@
   <div class="card">
     <p class="kicker">✏️ Ejercicio</p>
     <h3>Lean la salida de Excel</h3>
-    <p>Con los datos del péndulo simple ($\sqrt{L}$ vs $T$), <code>ESTIMACION.LINEAL</code> entregó esta salida:</p>
-    <div class="readout">
-      <div>m = 2.0098</div><div>b = −0.0006</div>
-      <div>s(m) = 0.0047</div><div>s(b) = 0.0107</div>
-      <div>r² = 0.9999</div><div>s_y,x = 0.0090</div>
+    <p>Con los datos del péndulo simple ($\sqrt{L}$ vs $T$), al correr <code>ESTIMACION.LINEAL</code> y seleccionar el rango de salida, esto es lo que aparece en la hoja (tal cual, sin etiquetas — Excel no les dice cuál valor es cuál):</p>
+    <div class="xl-wrap">
+      <table class="xl">
+        <tr><th class="corner"></th><th>E</th><th>F</th></tr>
+        <tr><td class="rownum">1</td><td class="cell">2.0098</td><td class="cell">−0.0006</td></tr>
+        <tr><td class="rownum">2</td><td class="cell">0.0047</td><td class="cell">0.0107</td></tr>
+        <tr><td class="rownum">3</td><td class="cell">0.9999</td><td class="cell">0.0090</td></tr>
+        <tr><td class="rownum">4</td><td class="cell">182300</td><td class="cell">3</td></tr>
+        <tr><td class="rownum">5</td><td class="cell">14.9156</td><td class="cell">0.000246</td></tr>
+      </table>
     </div>
+    <p>Guíense por el orden que trae la Tabla 1 del documento de incertidumbre para identificar qué es cada celda.</p>
 
     <div class="fill">
       <label for="inM">Pendiente con su incertidumbre, formato m = m̄ ± s(m):</label>
@@ -737,6 +808,65 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     render();
+  })();
+
+  // ================= EXERCISE T: transfer problems (illuminance, decay, thermistor) =================
+  (function () {
+    function norm(v) {
+      return (v || '')
+        .toLowerCase()
+        .replace(/\s+/g, '')
+        .replace(/[()]/g, '')
+        .replace(/\u2212/g, '-')
+        .replace(/\u03bb/g, 'lambda')
+        .replace(/\u221e/g, 'inf')
+        .replace(/[\u00b7*]/g, '')
+        .replace(/\u00b2/g, '^2')
+        .replace(/\u2080/g, '0');
+    }
+    function matches(inputEl, accepted) {
+      var v = norm(inputEl.value);
+      var ok = v.length > 0 && accepted.some(function (a) { return v === norm(a); });
+      inputEl.classList.remove('correct', 'incorrect');
+      inputEl.classList.add(ok ? 'correct' : 'incorrect');
+      return ok;
+    }
+
+    var FIELDS = [
+      { id: 't1x', accepted: ['1/d^2', 'd^-2'] },
+      { id: 't1y', accepted: ['e'] },
+      { id: 't1m', accepted: ['i'] },
+      { id: 't1b', accepted: ['0'] },
+      { id: 't2x', accepted: ['t'] },
+      { id: 't2y', accepted: ['ln(n)', 'lnn'] },
+      { id: 't2m', accepted: ['-lambda'] },
+      { id: 't2b', accepted: ['ln(n0)', 'lnn0'] },
+      { id: 't3x', accepted: ['1/t'] },
+      { id: 't3y', accepted: ['r'] },
+      { id: 't3m', accepted: ['k'] },
+      { id: 't3b', accepted: ['rinf', 'r_inf'] }
+    ];
+    var feedback = document.getElementById('feedbackT');
+
+    document.getElementById('verifyT').addEventListener('click', function () {
+      var allOk = true;
+      FIELDS.forEach(function (f) {
+        var el = document.getElementById(f.id);
+        if (!matches(el, f.accepted)) allOk = false;
+      });
+      feedback.textContent = allOk
+        ? '¡Las doce respuestas son correctas!'
+        : 'Algunas respuestas no coinciden todavía (en rojo). Revisen notación: usen "/" para fracciones y "-lambda" o "−λ" para la constante de decaimiento.';
+      feedback.className = 'feedback ' + (allOk ? 'ok' : 'bad');
+    });
+
+    document.getElementById('solveT').addEventListener('click', function () {
+      ['t1ans', 't2ans', 't3ans'].forEach(function (id) {
+        document.getElementById(id).classList.add('show');
+      });
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+    });
   })();
 
   // ================= MCQ (all sections): random order + per-option feedback =================
